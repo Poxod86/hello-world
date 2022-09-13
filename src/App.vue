@@ -1,28 +1,46 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <div class="display">
+		<input v-model="operand1"/>
+		{{ operator }}
+		<input v-model="operand2"/>
+		= {{ result }} <br>
+		<button @click="operator = '+'">+</button>
+		<button @click="operator = '-'">-</button>
+		<button @click="operator = '*'">*</button>
+		<button @click="operator = '/'">/</button>
+		<button @click="operator = this.result">=</button>
+
+	</div>
+		
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
-  }
+  	data() {
+			return {
+			operand1: 0,
+			operand2: 0,
+			operator: '+',
+			result: 0
+		}
+	},
+	methods: {
+		getResult() {
+			switch (operator) {
+				case this.operator == '+':
+					this.result = Number(this.operand1) + Number(this.operand2)
+					break;
+			
+				default: result = "Error"
+					break;
+			}
+		}
+	}
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+
 </style>
