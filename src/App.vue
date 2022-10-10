@@ -1,44 +1,107 @@
 <template>
-  <div class="display">
-		<div class="screen">
-			<input @keyup.enter="calc()" type="text" v-model="result" placeholder="0">
+	<div class="calc">
+		<div class="display">
+			<input v-model.number="operand1" type="text"/>
+			<p> {{ operator }} </p>
+			<input v-model.number="operand2" type="text"/>
+			= 
+			<input v-model="result" type="text" readonly/>
 		</div>
-		<div class="keyboard">
-			
-      <div class="calc-num">
-				<button @click="input(num)" class="cell num" v-for="num in numbers">{{num}}</button>
+		<div v-if="error" class="error"> {{ error }} </div>
+		<div class="keyboards">
+			<div class="row">
+				<button v-for="item in operators" :key ="item" @click ="setOperator(item)">{{ item }}</button>
+				
 			</div>
-      <button @click="input(op)" class="cell op" v-for="op in operators">{{op}}</button>
-      <button @click="reset()" class="cell op">R</button>
-      <button @click="calc()" class="cell op">=</button>
 		</div>
+		<input type="checkbox" v-model="light" v-bind:true-value="on" v-bind:false-value="off" />
+      <span v-if="light===on">Убрать экранную клавиатуру <br>
+				<button v-for="item in numbers" :key ="item" @click ="setOperand(item)">{{ item }}</button>
+				<button @click ="reset">Reset</button>
+			
+      
+		<br>
+			<input type="radio" value="operand1" v-model="operand">
+			<label>Операнд-1</label>
+			<input type="radio" value="operand2" v-model="operand">
+			<label>Операнд-2</label>
+		</span><span v-else>Отобразить экранную клавиатуру</span>	
 
+	
 	</div>
 		
+	
 </template>
 
 <script>
+
 
 export default {
   name: 'App',
   	data() {
 			return {
+			operand: "",
+			operand1: "",
+			operand2: "",
+			operator: '+',
 			numbers: [1,2,3,4,5,6,7,8,9,0],
 			operators: ['+','-','*','/','**'],
-			result: ''
+			error: '',
+			on: true,
+      off:false,
+      light: false
 		}
 	},
+
+	computed:{
+		result() {
+			this.error ='';
+			switch (this.operator) {
+				case "+":
+					return  this.operand1 + this.operand2
+					break;
+				case "-":
+				return this.operand1 - this.operand2
+					break;
+				case "*":
+				return this.operand1 * this.operand2
+					break;
+				case "/":
+					if(this.operand2 == 0) {
+						return 'На ноль делить нельзя !'
+					} else {
+						return this.operand1 / this.operand2
+					}
+					
+					break;
+				case "**":
+				return this.operand1 ** this.operand2
+					break;
+				case "//":
+				return Math.floor(this.operand1 + this.operand2)
+					break;
+			
+				default:
+					break;
+			}
+		}
+	},
+
 	methods: {
-		input: function(char) {
-      this.result = this.result.toString();
-      this.result+=char;
-    },
-		reset: function() {
-      this.result = '';
-    },
-    calc: function() {
-      this.result = eval(this.result);
-    }	
+		setOperator(operator) {
+			this.operator = operator
+		},
+		setOperand(operand2) {
+			  
+				this.operand2 = Number(String(this.operand2)+ String(operand2))
+			
+		},
+		reset() {
+			this.operator = "+",
+			this.operand1 = "",
+			this.operand2 = "",
+			this.result =""
+		},
 		
 	}
 }
@@ -48,43 +111,31 @@ export default {
 	* {
 		font-family: 'Gilroy',sans-serif;
 		transition: 0.3s all;
-			font-weight: 600;
+		font-weight: 600;
+	}
+	.calc {
+		max-width: 600px;
+		margin: 0 auto;
 	}
 	.display {
-		width: 200px;
-		box-shadow: 0 3px 15px grey;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		width: 600px;
+		
+		margin: 50px auto;
 	}
 	input[type="text"] {
 		width: 190px;
-		border: 0;
+		border: 0 solid gray;
 		color: #243849;
 		font-size: 18px;
 		padding: 5px 5px;
 		text-align: right;
+		box-shadow: 0 3px 15px grey;
 	}
-	.keyboard, .calc-num {
-		display: flex;                       
-		flex-wrap: wrap;  
-		justify-content: space-around;
-		width: 100%;
-		
-	}
-	.cell {
-		flex: 33%;                       
-		height: 50px;
-		font-size: 18px;
-		border: none;
-	}
-	.num {
-		background-color: #243849;
-		color: #fff;
-		font-weight: 400;
-	}
-	.cell:hover{
-		background-color: #182530;
-	}
-	.op {
-		background-color: #3cff00;
-		color: #243849;
+	.keyboards{
+		margin: 0 auto;
+		text-align: center;
 	}
 </style>
