@@ -2,7 +2,7 @@
 	<div class="calc">
 		<div class="display">
 			<input v-model.number="operand1" type="text"/>
-			<p> + </p>
+			<p> {{ operator }} </p>
 			<input v-model.number="operand2" type="text"/>
 			= 
 			<input v-model="result" type="text" readonly/>
@@ -10,10 +10,24 @@
 		<div v-if="error" class="error"> {{ error }} </div>
 		<div class="keyboards">
 			<div class="row">
-				<button v-for="item in operators" v-bind:key ="item" @click ="getResult(item)">{{ item }}</button>
+				<button v-for="item in operators" :key ="item" @click ="setOperator(item)">{{ item }}</button>
 				
 			</div>
 		</div>
+		<input type="checkbox" v-model="light" v-bind:true-value="on" v-bind:false-value="off" />
+      <span v-if="light===on">Убрать экранную клавиатуру <br>
+				<button v-for="item in numbers" :key ="item" @click ="setOperand(item)">{{ item }}</button>
+				<button @click ="reset">Reset</button>
+			
+      
+		<br>
+			<input type="radio" value="operand1" v-model="operand">
+			<label>Операнд-1</label>
+			<input type="radio" value="operand2" v-model="operand">
+			<label>Операнд-2</label>
+		</span><span v-else>Отобразить экранную клавиатуру</span>	
+
+	
 	</div>
 		
 	
@@ -21,50 +35,73 @@
 
 <script>
 
+
 export default {
   name: 'App',
   	data() {
 			return {
-			operand1: 0,
-			operand2: 0,
+			operand: "",
+			operand1: "",
+			operand2: "",
+			operator: '+',
 			numbers: [1,2,3,4,5,6,7,8,9,0],
 			operators: ['+','-','*','/','**'],
-			result: 0,
-			error: ''
+			error: '',
+			on: true,
+      off:false,
+      light: false
 		}
 	},
-	methods: {
-		getResult(operator){
+
+	computed:{
+		result() {
 			this.error ='';
-			switch (operator) {
+			switch (this.operator) {
 				case "+":
-					this.result = this.operand1 + this.operand2
+					return  this.operand1 + this.operand2
 					break;
 				case "-":
-					this.result = this.operand1 - this.operand2
+				return this.operand1 - this.operand2
 					break;
 				case "*":
-					this.result = this.operand1 * this.operand2
+				return this.operand1 * this.operand2
 					break;
 				case "/":
 					if(this.operand2 == 0) {
-						this.error = 'На ноль делить нельзя !'
+						return 'На ноль делить нельзя !'
 					} else {
-						this.result = this.operand1 / this.operand2
+						return this.operand1 / this.operand2
 					}
 					
 					break;
 				case "**":
-					this.result = this.operand1 ** this.operand2
+				return this.operand1 ** this.operand2
 					break;
 				case "//":
-					this.result = Math.floor(this.operand1 + this.operand2)
+				return Math.floor(this.operand1 + this.operand2)
 					break;
 			
 				default:
 					break;
 			}
 		}
+	},
+
+	methods: {
+		setOperator(operator) {
+			this.operator = operator
+		},
+		setOperand(operand2) {
+			  
+				this.operand2 = Number(String(this.operand2)+ String(operand2))
+			
+		},
+		reset() {
+			this.operator = "+",
+			this.operand1 = "",
+			this.operand2 = "",
+			this.result =""
+		},
 		
 	}
 }
