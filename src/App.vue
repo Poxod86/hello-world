@@ -17,7 +17,8 @@
 		<input type="checkbox" v-model="light" v-bind:true-value="on" v-bind:false-value="off" />
       <span v-if="light===on">Убрать экранную клавиатуру <br>
 				<button v-for="item in numbers" :key ="item" @click ="setOperand(item)">{{ item }}</button>
-				<button @click ="reset">Reset</button>
+				<button @click ="reset()">Reset</button>
+				<button @click ="backspace(operand2)"> Backspace </button>
 			
       
 		<br>
@@ -25,6 +26,7 @@
 			<label>Операнд-1</label>
 			<input type="radio" value="operand2" v-model="operand">
 			<label>Операнд-2</label>
+			{{ operand }}
 		</span><span v-else>Отобразить экранную клавиатуру</span>	
 
 	
@@ -40,7 +42,7 @@ export default {
   name: 'App',
   	data() {
 			return {
-			operand: "",
+			operand: "operand2",
 			operand1: "",
 			operand2: "",
 			operator: '+',
@@ -92,16 +94,16 @@ export default {
 			this.operator = operator
 		},
 		setOperand(operand2) {
-			  
-				this.operand2 = Number(String(this.operand2)+ String(operand2))
-			
+			this.operand2 = Number(String(this.operand2)+ String(operand2))
+		},
+		backspace(operand2){
+			this.operand2 = Math.trunc(operand2 / 10)
 		},
 		reset() {
 			this.operator = "+",
 			this.operand1 = "",
-			this.operand2 = "",
-			this.result =""
-		},
+			this.operand2 = ""
+		}
 		
 	}
 }
