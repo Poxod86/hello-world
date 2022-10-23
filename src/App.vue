@@ -18,7 +18,7 @@
       <span v-if="light===on">Убрать экранную клавиатуру <br>
 				<button v-for="item in numbers" :key ="item" @click ="setOperand(item)">{{ item }}</button>
 				<button @click ="reset()">Reset</button>
-				<button @click ="backspace(operand1)"> Backspace </button>
+				<button @click ="backspace(operand1, operand2)"> Backspace </button>
 			
       
 		<br>
@@ -102,11 +102,11 @@ export default {
       this.operand2 = Number(String(this.operand2)+ String(number))
       }
 		},
-		backspace(number){
+		backspace(number1, number2){
 			if (this.picked === "one") {
-				this.operand1 = Math.trunc(number / 10)
+				this.operand1 = Math.trunc(number1 / 10)
 			} else if (this.picked === "two") {
-				this.operand2 = Math.trunc(number / 10)
+				this.operand2 = Math.trunc(number2 / 10)
 			}
 			
 		},
