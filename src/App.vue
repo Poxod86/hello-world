@@ -18,17 +18,17 @@
       <span v-if="light===on">Убрать экранную клавиатуру <br>
 				<button v-for="item in numbers" :key ="item" @click ="setOperand(item)">{{ item }}</button>
 				<button @click ="reset()">Reset</button>
-				<button @click ="backspace(operand2)"> Backspace </button>
+				<button @click ="backspace(operand1)"> Backspace </button>
 			
       
 		<br>
-			<input type="radio" value="operand1" v-model="operand">
-			<label>Операнд-1</label>
-			<input type="radio" value="operand2" v-model="operand">
-			<label>Операнд-2</label>
-			{{ operand }}
-		</span><span v-else>Отобразить экранную клавиатуру</span>	
-
+		
+		<input type="radio" id="one" value="one" v-model="picked" />
+		<label for="one">Операнд 1</label>
+		<input type="radio" id="two" value="two" v-model="picked" />
+		<label for="two">Операнд 2</label>
+			</span><span v-else>Отобразить экранную клавиатуру</span>	
+		
 	
 	</div>
 		
@@ -42,7 +42,6 @@ export default {
   name: 'App',
   	data() {
 			return {
-			operand: "operand2",
 			operand1: "",
 			operand2: "",
 			operator: '+',
@@ -51,7 +50,9 @@ export default {
 			error: '',
 			on: true,
       off:false,
-      light: false
+      light: false,
+			checked: "",
+      picked: "",
 		}
 	},
 
@@ -93,11 +94,21 @@ export default {
 		setOperator(operator) {
 			this.operator = operator
 		},
-		setOperand(operand2) {
-			this.operand2 = Number(String(this.operand2)+ String(operand2))
+		setOperand(number) {
+			//this.operand2 = Number(String(this.operand2)+ String(operand2))
+			if (this.picked === "one") {
+				this.operand1 = Number(String(this.operand1)+ String(number))
+			} else if (this.picked === "two") {
+      this.operand2 = Number(String(this.operand2)+ String(number))
+      }
 		},
-		backspace(operand2){
-			this.operand2 = Math.trunc(operand2 / 10)
+		backspace(number){
+			if (this.picked === "one") {
+				this.operand1 = Math.trunc(number / 10)
+			} else if (this.picked === "two") {
+				this.operand2 = Math.trunc(number / 10)
+			}
+			
 		},
 		reset() {
 			this.operator = "+",
